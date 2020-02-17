@@ -1,0 +1,100 @@
+APUNTES_ MONGO_DB:
+
+- Mongo: base de datos no documental, que cuarda los datos se guardan especificando un nombre : valor , no por tablas.
+
+Mongo 			oracle
+Base			Base
+Collection		taboa
+Documento		Fila
+Key(clave)		Columna
+Valor			Valor
+_id			Clase primaria (por defecto)
+
+
+show databases =) para ver las bases que hay
+use "nomedabase" =) para cambiar de base de datos
+show collections =)ver colecciones de las bases de datos
+db."nomecoleccion".find() =) ver documentos de la coleccion
+
+como lanzar mongo : 
+- abrimos terminal
+- ponemos : mongod
+-abrimos otro terminal sin cerrar el primero
+- ponemos: mongo (trabajaremos en este)
+
+
+
+Como crear una base de datos en Mongo
+-use baseexemplo  (y crearia la base de datos)
+para crear ua coleccion: 
+db.persoas.insert(
+{ "nome": "luis",
+numeros:[23,86,89]
+} )
+
+- PARA BORRAR UN DOCUMENTO, DENTRO DE LA COLECCION : 	db.persoas.remove({nome:"luis"})
+
+
+
+
+
+
+ db.persoas.insert({"nome":"ana","edade":31,numeros:[54,36,12,15],"enderezo":{"rua":"urzaiz","numero":24,"piso":3,"porta":"a"}})
+ db.persoas.insert({"nome":"felix","edade":40,"enderezo":{"rua":"faisan","numero":14,"piso":1}})
+
+para que nos enseñe a los luis:							db.persoas.find({nome:"luis"})
+para mirar el campo dentro de un campo:						db.persoas.find({"enderezo.rua":"faisan"}) 			
+otra manera de buscar por luis: 						db.persoas.find({"nome":{$eq:"luis"}})
+para buscar los que no son como el campo dado :       		 		db.persoas.find({edade:{$ne:31}})
+Lista cualquier documento que no cumpla la condicion o que esta vacío:		db.persoas.find({nome:{$in:["ana","luis"]}})
+Lista los elementos que no estan entre los que buscamos				db.persoas.find({nome:{$nin:["ana","luis"]}})
+Lista los elementos mayores al valor indicado y no muestra nulos(mayor que)	db.persoas.find({edade:{$gt:30}})
+Lista los elementos menores al valor indicado (menor que)			db.persoas.find({edade:{$lt:40}})
+Lista para enseñar mayor o igual						db.persoas.find({edade:{$gte:31}})
+Lista que enseña menor o igual 							db.persoas.find({edade:{$lte:40}})
+Lista de los que sean, mas nulos 						db.persoas.find({edade:{$ne:40}})
+
+
+
+
+Lista o que tenga 31 años, o que se llame ana					db.persoas.find({$or:[{edade:{$gt:31}},{nome:{$eq:'ana'}}])
+Lista as que tenga 31 y ademas que se llame ana					db.persoas.find({$and:[{edade:{$gt:31}},{nome:{$eq:'ana'}}])
+Lista los que no sean mayores a la edad:31(y los nulos)				db.persoas.find({edade:{$not:{$gt:31}}})
+Lista los que no tengan 30 años y no se llamen ana				db.persoas.find({$nor:[{edade:30},{nome:'ana'}]})
+
+Lista los que no tengan edad 30, que no tengan la edad nula , los que no se llame ana y que el nombre no sea nulo 					>db.persoas.find({$nor:[{edade:30},{edade:{$exists:false}},{nome:'ana'},{nome:{$exists:false}}]})
+
+Lista los que tengan edade y no sea ni 30 ni 40 				db.persoas.find({edade:{$exists:true,$nin:[30,40]}})
+Lista dentro de la edad 30, selecciona los campos nome y edade(1=true)		db.persoas.find({edade:{$gt:30},{nome:1,edade:1})
+Lista dentro de los que tengan edad 30 y no selecciona el id (0=false) 		db.persoas.find({edade:{$gt:30}},{_id:0})
+
+Amosar todos os campos excepto o nome de todos os documentos onde a idade sexa maior de 31 ou cuxo nome sea ana.	
+>db.persoas.find({$or:[{edade:{$gt:31}},{nome:''ana}],{nome:0})
+
+Lista en orden ascendente						db.persoas.find().sort({nome:1})
+Lista en orden descendente						db.persoas.find().sort({nome:-1})
+Lista los dos primeros 							db.persoas.find().limit(2)
+Lista los dos primeros y ordenados 					db.persoas.find().sort({nome:1}).limit(2)
+Lista el mas mayor							db.persoas.find().sort({edade:-1}).limit(1)(si fuera la mas joven seria 1 en vez de -1)
+									db.scores.find({score:{$lt:60}}).limit(5).sort({score:1})
+
+
+
+Insertamos con un id propio						db.scores.insert({_id:1,kind:'taller',score:15,student: 5})
+Insertamos con un id propio(2)						db.scores.insert({_id:2,kind:'taller',score:25,student: 4})
+
+Actualizamos un campo(machaca todo) 					db.scores.update({_id:1},{score:35})
+Actualiza, respetando lo demas(solo cambia la puntuacion)		db.scores.update({_id:2},{$set:{score:35}})
+si vuelves a añadir un campo diferente, lo crea				db.scores.update({_id:2},{$set:{scor:12}})
+Borramos un campo(respetamos los demas)					db.scores.update({_id:2},{$unset:{scor:12}})
+
+
+Borramos un base de datos entera					db.drop"nombredelabasededatos"()
+
+Incrmentar el valor d euna variable 					db.books.update({"_id":1},{$inc:{"stock":5}})
+
+
+
+
+
+
