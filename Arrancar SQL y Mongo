@@ -1,0 +1,13 @@
+ORACLE SQL
+.oraenv --> conectarse a orcale
+orcl
+rlwrap sqlplus sys/oracle as sysdba --> conectarse como administrador
+rlwrap sqlplus hr/hr --> conectarte como hr
+lsnrctl start --> levantar la escucha de oracle
+
+Mongo
+- abrimos terminal
+- ponemos : mongod
+- abrimos otro terminal sin cerrar el primero
+- ponemos: mongo (trabajaremos en este terminal)
+
